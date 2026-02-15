@@ -8,8 +8,11 @@ set -e
 echo "=== Workflow Template Setup ==="
 echo ""
 
-# Get project name
-read -p "Project name: " PROJECT_NAME
+# Get project name (accept from argument or prompt)
+PROJECT_NAME="${1:-}"
+if [ -z "$PROJECT_NAME" ]; then
+  read -p "Project name: " PROJECT_NAME
+fi
 if [ -z "$PROJECT_NAME" ]; then
   echo "Error: Project name is required"
   exit 1

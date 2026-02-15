@@ -101,7 +101,7 @@ main() {
   # Run interactive setup
   info "Starting interactive setup..."
   echo ""
-  bash setup.sh
+  bash setup.sh "$PROJECT_NAME"
 
   # Initialize fresh git repo
   if command -v git >/dev/null 2>&1 && [ ! -d ".git" ]; then
