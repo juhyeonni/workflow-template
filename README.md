@@ -42,7 +42,13 @@ bash setup.sh
 ### Option 2: One-line install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juhyeonni/workflow-template/main/install.sh | bash -s my-project
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/juhyeonni/workflow-template/main/install.sh)"
+```
+
+With project name:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/juhyeonni/workflow-template/main/install.sh)" -- my-project
 ```
 
 ## Directory Structure
