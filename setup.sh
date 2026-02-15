@@ -35,86 +35,18 @@ case $EDITOR_CHOICE in
   *) USE_CLAUDE=true;  USE_CURSOR=false ;;
 esac
 
-# Notification target
-read -p "Notification target (e.g., Telegram ID, Slack channel, or press Enter to skip): " NOTIFICATION_TARGET
-NOTIFICATION_TARGET=${NOTIFICATION_TARGET:-"{NOTIFICATION_TARGET}"}
-
-# Tech Stack Selection
-echo ""
-echo "=== Tech Stack Selection ==="
-echo "1) Node.js + TypeScript"
-echo "2) React + TypeScript"
-echo "3) Python"
-echo "4) Go"
-echo "5) Other / Skip"
-echo ""
-read -p "Select tech stack [1-5]: " TECH_CHOICE
-
-case $TECH_CHOICE in
-  1)
-    RUNTIME="Node.js"
-    FRAMEWORK="-"
-    LANGUAGE="TypeScript"
-    TEST_FRAMEWORK="Vitest"
-    DEV_INSTALL="npm install"
-    DEV_RUN="npm run dev"
-    DEV_BUILD="npm run build"
-    TEST_CMD="npm test"
-    LINT_CMD="npm run lint"
-    ;;
-  2)
-    RUNTIME="Node.js"
-    FRAMEWORK="React"
-    LANGUAGE="TypeScript"
-    TEST_FRAMEWORK="Vitest"
-    DEV_INSTALL="npm install"
-    DEV_RUN="npm run dev"
-    DEV_BUILD="npm run build"
-    TEST_CMD="npm test"
-    LINT_CMD="npm run lint"
-    ;;
-  3)
-    RUNTIME="Python"
-    FRAMEWORK="-"
-    LANGUAGE="Python"
-    TEST_FRAMEWORK="pytest"
-    DEV_INSTALL="pip install -r requirements.txt"
-    DEV_RUN="python main.py"
-    DEV_BUILD="python -m build"
-    TEST_CMD="pytest"
-    LINT_CMD="ruff check ."
-    ;;
-  4)
-    RUNTIME="Go"
-    FRAMEWORK="-"
-    LANGUAGE="Go"
-    TEST_FRAMEWORK="go test"
-    DEV_INSTALL="go mod download"
-    DEV_RUN="go run ."
-    DEV_BUILD="go build ."
-    TEST_CMD="go test ./..."
-    LINT_CMD="golangci-lint run"
-    ;;
-  *)
-    RUNTIME="-"
-    FRAMEWORK="-"
-    LANGUAGE="-"
-    TEST_FRAMEWORK="-"
-    DEV_INSTALL="# install dependencies"
-    DEV_RUN="# run dev server"
-    DEV_BUILD="# build for production"
-    TEST_CMD="# run tests"
-    LINT_CMD="# lint check"
-    ;;
-esac
-
-# Test setup option (Node.js only)
+# Defaults (no prompts needed)
+NOTIFICATION_TARGET="-"
+RUNTIME="-"
+FRAMEWORK="-"
+LANGUAGE="-"
+TEST_FRAMEWORK="-"
+DEV_INSTALL="# install dependencies"
+DEV_RUN="# run dev server"
+DEV_BUILD="# build for production"
+TEST_CMD="# run tests"
+LINT_CMD="# lint check"
 SETUP_TESTS="n"
-if [[ "$TECH_CHOICE" == "1" || "$TECH_CHOICE" == "2" ]]; then
-  echo ""
-  read -p "Setup test environment with Vitest? [y/N]: " SETUP_TESTS
-  SETUP_TESTS=${SETUP_TESTS:-n}
-fi
 
 # Figma MCP setup
 echo ""
@@ -192,42 +124,6 @@ if [ "$USE_CURSOR" = true ]; then
   find .cursor/skills -name "*.md" -exec sed -i "s|{lint_command}|$LINT_CMD|g" {} +
   find .cursor/skills -name "*.md" -exec sed -i "s|{typecheck_command}|# typecheck|g" {} +
   find .cursor/rules -name "*.mdc" -exec sed -i "s|{REPOSITORY}|$REPOSITORY|g" {} +
-fi
-
-# Setup test environment if requested
-if [[ "$SETUP_TESTS" =~ ^[Yy]$ ]]; then
-  echo "Setting up test environment..."
-  mkdir -p tests
-
-  if [ -d "templates" ]; then
-    cp templates/vitest.config.ts.template vitest.config.ts 2>/dev/null || true
-    cp templates/tests/example.test.ts.template tests/example.test.ts 2>/dev/null || true
-  fi
-
-  if [ ! -f "package.json" ]; then
-    cat > package.json << EOF
-{
-  "name": "$PROJECT_NAME",
-  "version": "0.1.0",
-  "description": "$PROJECT_DESC",
-  "type": "module",
-  "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "lint": "eslint ."
-  },
-  "devDependencies": {
-    "vitest": "^2.0.0",
-    "@vitest/coverage-v8": "^2.0.0",
-    "typescript": "^5.0.0"
-  }
-}
-EOF
-    echo "Created package.json"
-  fi
-
-  echo "Test environment setup complete!"
 fi
 
 # Create project.json if project number provided
