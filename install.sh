@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Workflow Template One-Line Installer
 #
@@ -22,37 +22,37 @@ REPO_URL="https://github.com/juhyeonni/workflow-template.git"
 
 print_banner() {
   echo ""
-  echo -e "${BLUE}${BOLD}"
+  printf "${BLUE}${BOLD}\n"
   echo "  ╔══════════════════════════════════════════╗"
   echo "  ║       Workflow Template Installer        ║"
   echo "  ║     6-Phase Development Workflow         ║"
   echo "  ╚══════════════════════════════════════════╝"
-  echo -e "${NC}"
+  printf "${NC}\n"
 }
 
 error() {
-  echo -e "${RED}Error: $1${NC}" >&2
+  printf "${RED}Error: %s${NC}\n" "$1" >&2
   exit 1
 }
 
 info() {
-  echo -e "${BLUE}$1${NC}"
+  printf "${BLUE}%s${NC}\n" "$1"
 }
 
 success() {
-  echo -e "${GREEN}$1${NC}"
+  printf "${GREEN}%s${NC}\n" "$1"
 }
 
 warn() {
-  echo -e "${YELLOW}$1${NC}"
+  printf "${YELLOW}%s${NC}\n" "$1"
 }
 
 # Check dependencies
 check_deps() {
-  if ! command -v git &> /dev/null; then
+  if ! command -v git >/dev/null 2>&1; then
     error "git is required but not installed. Install it first."
   fi
-  if ! command -v gh &> /dev/null; then
+  if ! command -v gh >/dev/null 2>&1; then
     warn "Warning: GitHub CLI (gh) not found. Some setup features will be limited."
     warn "Install: https://cli.github.com/"
     echo ""
@@ -107,15 +107,15 @@ main() {
   fi
 
   echo ""
-  echo -e "${GREEN}${BOLD}"
+  printf "${GREEN}${BOLD}\n"
   echo "  ╔══════════════════════════════════════════╗"
   echo "  ║            Setup Complete!               ║"
   echo "  ╚══════════════════════════════════════════╝"
-  echo -e "${NC}"
+  printf "${NC}\n"
   echo ""
-  echo -e "  ${BOLD}cd $PROJECT_NAME${NC} and start developing!"
+  printf "  ${BOLD}cd %s${NC} and start developing!\n" "$PROJECT_NAME"
   echo ""
-  echo -e "  Say ${BOLD}'let's start working'${NC} to begin the 6-phase workflow."
+  printf "  Say ${BOLD}'let's start working'${NC} to begin the 6-phase workflow.\n"
   echo ""
 }
 
